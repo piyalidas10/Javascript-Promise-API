@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Javascript Promise</title>
+</head>
+
+<body>
+<script>
+	let myPromise = new Promise(function(resolve, reject){
+	let xhttp = new XMLHttpRequest();
+	xhttp.open("GET", "http://piyalidas.in/webservice/webservice.php?type=all&format=json");
+	
+		xhttp.onload = () => {  // () => means function(). onload not worked in safari, onreadystatechange works
+			if (xhttp.status === 200) {
+			  resolve(xhttp.response); // we got data here, so resolve the Promise
+			} 
+			else {
+			  reject(Error("Error fetching data.")); // status is not 200 OK, so reject
+			}
+		 };		
+
+	  xhttp.send(); //Sends the request to the server (used for GET)
+});
+
+myPromise.then(
+  data => {
+	this.projects = JSON.parse(data);
+	console.log(this.projects.posts);
+	document.writeln("<p>Project ID : "+this.projects.posts[0].post.project_id+"</p>");
+	document.writeln("<p>Project Name : "+this.projects.posts[0].post.project_name+"</p>");
+	document.writeln("<p>Project Type : "+this.projects.posts[0].post.project_type+"</p>");
+	document.writeln("<p>Project Language : "+this.projects.posts[0].post.LanguageName+"</p>");
+  },
+  error => {
+    document.writeln("<h1>Promise rejected.</h1>");
+    document.writeln("<h1>"+error.message+"</h1>");
+  }
+);
+</script>
+
+
+</body>
+</html>
